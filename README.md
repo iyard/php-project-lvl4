@@ -4,4 +4,4 @@
 
 # About
 
-https://hexletseotest.herokuapp.com
+https://hexlet-task-manager.herokuapp.com
