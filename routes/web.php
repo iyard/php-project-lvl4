@@ -12,7 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('page.index');
 });
 
-Route::resource('/users', 'UserController');
+
+Auth::routes();
+
+Route::resource('/users', 'UserController')->except([
+    'create'
+]);
+
+Route::get('/home', 'HomeController@index')->name('home');

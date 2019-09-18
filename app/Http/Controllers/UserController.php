@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreUser;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        //$this->middleware('auth')->only('edit', 'delete');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::paginate();
+        return view('user.index', compact('users'));
     }
 
     /**
@@ -22,10 +30,10 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+    //public function create()
+    //{
+    //    return redirect()->route('register');
+    //}
 
     /**
      * Store a newly created resource in storage.
@@ -33,10 +41,10 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    //public function store(Request $request)
+    //{
         //
-    }
+    //}
 
     /**
      * Display the specified resource.
@@ -46,7 +54,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('user.show', compact('user'));
     }
 
     /**
@@ -57,7 +65,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('user.edit', compact('user'));
     }
 
     /**
@@ -67,9 +75,13 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(StoreUser $request, User $user)
     {
-        //
+        $validated = $request->validated();
+        $user->fill($request->all());
+        $user->save();
+        return redirect()
+            ->route('users.index');
     }
 
     /**
