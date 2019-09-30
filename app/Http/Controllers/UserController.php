@@ -11,7 +11,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('auth')->only('edit', 'delete');
+        $this->middleware('auth')->only('edit', 'delete');
     }
 
     /**
@@ -24,27 +24,6 @@ class UserController extends Controller
         $users = User::paginate();
         return view('user.index', compact('users'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    //public function create()
-    //{
-    //    return redirect()->route('register');
-    //}
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    //public function store(Request $request)
-    //{
-        //
-    //}
 
     /**
      * Display the specified resource.
@@ -92,6 +71,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('users.index');
     }
 }
