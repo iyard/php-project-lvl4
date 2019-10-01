@@ -59,6 +59,7 @@ class UserController extends Controller
         $validated = $request->validated();
         $user->fill($request->all());
         $user->save();
+        flash("User updated!")->success();
         return redirect()
             ->route('users.index');
     }
@@ -72,6 +73,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+        flash("User deleted!")->success();
         return redirect()->route('users.index');
     }
 }

@@ -2,6 +2,7 @@
 
 @section('title', 'Users list')
 @section('content')
+    @include('flash::message')
     <h1>Users List</h1>
     <table class="table">
         <thead>
