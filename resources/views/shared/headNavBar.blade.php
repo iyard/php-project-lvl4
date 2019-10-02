@@ -13,6 +13,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
                     </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="{{ route('statuses.index') }}">{{ __('Statuses') }}</a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

@@ -4,9 +4,6 @@ namespace Tests\Unit;
 
 use App\User;
 
-use Mockery;
-use App\Service;
-
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -61,7 +58,8 @@ class UserTest extends TestCase
 
     public function testDestroy()
     {
-        $response = $this->delete(route('users.destroy', $this->user));
+        $response = $this->actingAs($this->user)
+                         ->delete(route('users.destroy', $this->user));
         $response->assertStatus(302);
         $this->assertDatabaseMissing('users', [
             'name' => $this->user->name,

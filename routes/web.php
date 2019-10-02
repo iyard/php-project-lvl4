@@ -15,8 +15,11 @@ Route::get('/', function () {
     return view('page.index');
 });
 
-
 Auth::routes();
+
+Route::resource('/statuses', 'TaskStatusController')->except([
+    'show'
+]);
 
 Route::resource('/users', 'UserController')->except([
     'create'
