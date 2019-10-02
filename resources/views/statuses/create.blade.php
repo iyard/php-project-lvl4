@@ -10,7 +10,7 @@
                     <div class="card-body">
                         {{ Form::model($status, ['url' => route('statuses.store')]) }}
                         @include('statuses.form')
-                        {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
+                        {{ Form::submit(__('buttons.save'), ['class' => 'btn btn-primary']) }}
                         {{ Form::close() }}  
                     </div>
                 </div>

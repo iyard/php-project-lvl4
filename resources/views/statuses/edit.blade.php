@@ -10,7 +10,7 @@
                     <div class="card-body">
                         {{ Form::model($status, ['url' => route('statuses.update', ['status' => $status]), 'method' => 'PATCH']) }}
                         @include('statuses.form')
-                        {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
+                        {{ Form::submit(@lang('buttons.save'), ['class' => 'btn btn-primary']) }}
                         {{ Form::close() }}  
                     </div>
                 </div>

@@ -21,8 +21,8 @@
                     <th scope="row">{{$status->id}}</th>
                     <td>{{$status->name}}</td>
                     <td>
-                        <a href="{{ route('statuses.edit', ['status' => $status]) }}" class="btn btn-info">Edit</a>
-                        <a href="{{ route('statuses.destroy', ['status' => $status]) }}" class="btn btn-danger" data-confirm="Вы уверены?" data-method="delete" rel="nofollow">Delete</a>
+                        <a href="{{ route('statuses.edit', ['status' => $status]) }}" class="btn btn-info">@lang('buttons.edit')</a>
+                        <a href="{{ route('statuses.destroy', ['status' => $status]) }}" class="btn btn-danger" data-confirm="Вы уверены?" data-method="delete" rel="nofollow">@lang('buttons.delete')</a>
                     </td>
                 </tr>
             @endforeach

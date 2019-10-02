@@ -9,8 +9,8 @@
                 <div class="card-body">
                     {{ Form::model($user, ['url' => route('users.update', ['user' => $user]), 'method' => 'PATCH']) }}
                     @include('user.form')
-                    {{ Form::submit('Обновить', ['class' => 'btn btn-primary']) }}
-                    <a href="{{ route('users.destroy', ['user' => $user]) }}" class="btn btn-danger" data-confirm="Вы уверены?" data-method="delete" rel="nofollow">Удалить</a>
+                    {{ Form::submit(@lang('buttons.save'), ['class' => 'btn btn-primary']) }}
+                    <a href="{{ route('users.destroy', ['user' => $user]) }}" class="btn btn-danger" data-confirm="Вы уверены?" data-method="delete" rel="nofollow">@lang('buttons.delete')</a>
                     {{ Form::close() }}  
                 </div>
             </div>

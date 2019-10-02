@@ -11,7 +11,8 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only('edit', 'destroy');
+        $this->middleware('auth')
+             ->only('edit', 'destroy');
     }
 
     /**
@@ -59,7 +60,8 @@ class UserController extends Controller
         $validated = $request->validated();
         $user->fill($request->all());
         $user->save();
-        flash("User updated!")->success();
+        flash(__('messages.update', ['name' => 'user']))
+            ->success();
         return redirect()
             ->route('users.index');
     }
@@ -73,7 +75,8 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        flash("User deleted!")->success();
+        flash(__('messages.delete', ['name' => 'user']))
+            ->success();
         return redirect()->route('users.index');
     }
 }

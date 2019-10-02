@@ -10,7 +10,8 @@ class TaskStatusController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except('index');
+        $this->middleware('auth')
+             ->except('index');
     }
 
     /**
@@ -49,7 +50,8 @@ class TaskStatusController extends Controller
         $status = new TaskStatus();
         $status->name = $request->input('name');
         $status->save();
-        flash("Status created!")->success();
+        flash(__('messages.create', ['name' => 'status']))
+            ->success();
         return redirect()
             ->route('statuses.index');
     }
@@ -79,7 +81,8 @@ class TaskStatusController extends Controller
         ]);
         $status->name = $request->input('name');
         $status->save();
-        flash("Status updated!")->success();
+        flash(__('messages.uodate', ['name' => 'status']))
+            ->success();
         return redirect()
             ->route('statuses.index');
     }
@@ -93,7 +96,8 @@ class TaskStatusController extends Controller
     public function destroy(TaskStatus $status)
     {
         $status->delete();
-        flash("Status deleted!")->success();
+        flash(__('messages.delete', ['name' => 'status']))
+            ->success();
         return redirect()
             ->route('statuses.index');
     }
