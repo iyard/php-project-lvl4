@@ -3,7 +3,7 @@
 return [
 
     'create' => ':Name created!',
-    'update' => ':Name uodated!',
+    'update' => ':Name updated!',
     'delete' => ':Name deleted!',
 
 ];
