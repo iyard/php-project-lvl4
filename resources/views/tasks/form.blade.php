@@ -39,5 +39,13 @@
     @enderror
 </div>
 
+<div class="form-group">
+    {{ Form::label('tags', 'Tags') }}
+    {{ Form::textarea('tags', $tagsString, ['class' => 'form-control', 'placeholder' => 'tag1, tag2, tag3, ...']) }}<br>
+    @error('tags')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
+</div>
+
 
 

@@ -15,6 +15,7 @@
                 <th scope="col">Status</th>
                 <th scope="col">Creator</th>
                 <th scope="col">Assigned to</th>
+                <th scope="col">Tags</th>
                 <th scope="col">Created at</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -27,6 +28,12 @@
                     <td>{{$task->status->name}}</td>
                     <td>{{$task->creator->name}}</td>
                     <td>{{$task->assignedTo->name}}</td>
+                    <td>
+                        @foreach($task->tags as $tag)
+                        #{{$tag->name}}
+                        
+                        @endforeach
+                    </td>
                     <td>{{$task->created_at}}</td>
                     <td>
                         <a href="{{ route('tasks.show', ['task' => $task]) }}" class="btn btn-secondary">@lang('buttons.show')</a>
