@@ -15,8 +15,6 @@ class TaskTest extends TestCase
 {
     private $task;
     private $user;
-    private $tagsString;
-    private $taskStatus;
 
     use RefreshDatabase;
 
@@ -28,13 +26,6 @@ class TaskTest extends TestCase
             factory(Tag::class, 3)->make()->toArray()
         );
         $this->user = factory(User::class)->create();
-
-        $this->tagsString = 'tag1, tag2, tag3';
-
-        $this->taskStatus = new TaskStatus();
-        $this->taskStatus->name = __('messages.defaultStatusName');
-        $this->taskStatus->slug = __('messages.defaultStatusSlug');
-        $this->taskStatus->save();  
     }
 
     public function testIndex()
@@ -47,7 +38,6 @@ class TaskTest extends TestCase
     {
         $response = $this->actingAs($this->user)
             ->get(route('tasks.create'));
-            //dd($response);
         $response->assertStatus(200);
     }
 
@@ -60,7 +50,7 @@ class TaskTest extends TestCase
                                             'status_id' => $this->task->status_id,
                                             'creator_id' => $this->task->creator_id,
                                             'assignedTo_id' => $this->task->assignedTo_id,
-                                            'tags' => $this->tagsString
+                                            'tags' => getTagsString($this->task->id)
                                             ]));
         $response->assertStatus(302);
         $this->assertDatabaseHas('tasks', [
@@ -96,7 +86,7 @@ class TaskTest extends TestCase
                                             'status_id' => $updatedTask->status_id,
                                             'creator_id' => $updatedTask->creator_id,
                                             'assignedTo_id' => $updatedTask->assignedTo_id,
-                                            'tags' => $this->tagsString
+                                            'tags' => getTagsString($this->task->id)
                                             ]));
         $response->assertStatus(302);
         $this->assertDatabaseHas('tasks', [
@@ -107,4 +97,20 @@ class TaskTest extends TestCase
             'assignedTo_id' => $updatedTask->assignedTo_id 
         ]);
     }
+
+    public function testDestroy()
+    {
+        $response = $this->actingAs($this->user)
+                         ->delete(route('tasks.destroy', $this->task));
+        $response->assertStatus(302);
+        $this->assertDatabaseMissing('tasks', [
+            'name' => $this->task->name,
+            'description' => $this->task->description,
+            'status_id' => $this->task->status_id,
+            'creator_id' => $this->task->creator_id,
+            'assignedTo_id' => $this->task->assignedTo_id 
+        ]);
+    }
+
+    
 }

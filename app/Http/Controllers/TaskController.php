@@ -33,7 +33,7 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($defaultTaskStatus = 'novyy')
+    public function create($defaultTaskStatus = null)
     {
         $task = new Task();
         $taskStatuses = TaskStatus::all();
