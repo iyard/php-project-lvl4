@@ -21,7 +21,13 @@ Route::resource('/statuses', 'TaskStatusController')->except([
     'show'
 ]);
 
-Route::resource('/tasks', 'TaskController');
+Route::get('/tasks/create/{defaultTaskStatus?}', 'TaskController@create')->name('tasks.create');
+
+Route::resource('/tasks', 'TaskController')->except([
+    'create'
+]);
+
+
 
 Route::resource('/users', 'UserController')->except([
     'create'

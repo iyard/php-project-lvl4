@@ -43,12 +43,12 @@ class UserTest extends TestCase
     {
         $updatedUser = factory(User::class)->make();
         $response = $this->actingAs($this->user)
-                         ->patch(route('users.update', ['user' => $this->user, 
-                                                        'name' => $updatedUser->name,
-                                                        'email' => $updatedUser->email,
-                                                        'password' => $updatedUser->password,
-                                                        'password_confirmation' => $updatedUser->password
-                                                        ]));
+            ->patch(route('users.update', ['user' => $this->user, 
+                                            'name' => $updatedUser->name,
+                                            'email' => $updatedUser->email,
+                                            'password' => $updatedUser->password,
+                                            'password_confirmation' => $updatedUser->password
+                                            ]));
         $response->assertStatus(302);
         $this->assertDatabaseHas('users', [
             'name' => $updatedUser->name,

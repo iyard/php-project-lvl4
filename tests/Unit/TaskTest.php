@@ -1,0 +1,110 @@
+<?php
+
+namespace Tests\Unit;
+
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+use App\Task;
+use App\User;
+use App\Tag;
+use App\TaskStatus;
+
+class TaskTest extends TestCase
+{
+    private $task;
+    private $user;
+    private $tagsString;
+    private $taskStatus;
+
+    use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->task = factory(Task::class)->create();
+        $this->task->tags()->createMany(
+            factory(Tag::class, 3)->make()->toArray()
+        );
+        $this->user = factory(User::class)->create();
+
+        $this->tagsString = 'tag1, tag2, tag3';
+
+        $this->taskStatus = new TaskStatus();
+        $this->taskStatus->name = __('messages.defaultStatusName');
+        $this->taskStatus->slug = __('messages.defaultStatusSlug');
+        $this->taskStatus->save();  
+    }
+
+    public function testIndex()
+    {
+        $response = $this->get(route('tasks.index'));
+        $response->assertStatus(200);
+    }
+
+    public function testCreate()
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('tasks.create'));
+            //dd($response);
+        $response->assertStatus(200);
+    }
+
+    public function testStore()
+    {
+        $response = $this->actingAs($this->user)
+            ->post(route('tasks.store', ['task' => $this->task, 
+                                            'name' => $this->task->name,
+                                            'description' => $this->task->description,
+                                            'status_id' => $this->task->status_id,
+                                            'creator_id' => $this->task->creator_id,
+                                            'assignedTo_id' => $this->task->assignedTo_id,
+                                            'tags' => $this->tagsString
+                                            ]));
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('tasks', [
+            'name' => $this->task->name,
+            'description' => $this->task->description,
+            'status_id' => $this->task->status_id,
+            'creator_id' => $this->task->creator_id,
+            'assignedTo_id' => $this->task->assignedTo_id 
+        ]);
+    }
+
+    public function testShow()
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('tasks.show', $this->task));
+        $response->assertStatus(200);
+    }
+
+    public function testEdit()
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('tasks.edit', $this->task));
+        $response->assertStatus(200);
+    }
+
+    public function testUpdate()
+    {
+        $updatedTask = factory(Task::class)->make();
+        $response = $this->actingAs($this->user)
+            ->patch(route('tasks.update', ['task' => $this->task, 
+                                            'name' => $updatedTask->name,
+                                            'description' => $updatedTask->description,
+                                            'status_id' => $updatedTask->status_id,
+                                            'creator_id' => $updatedTask->creator_id,
+                                            'assignedTo_id' => $updatedTask->assignedTo_id,
+                                            'tags' => $this->tagsString
+                                            ]));
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('tasks', [
+            'name' => $updatedTask->name,
+            'description' => $updatedTask->description,
+            'status_id' => $updatedTask->status_id,
+            'creator_id' => $updatedTask->creator_id,
+            'assignedTo_id' => $updatedTask->assignedTo_id 
+        ]);
+    }
+}

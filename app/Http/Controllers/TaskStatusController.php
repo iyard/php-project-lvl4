@@ -49,6 +49,7 @@ class TaskStatusController extends Controller
         ]);
         $status = new TaskStatus();
         $status->name = $request->input('name');
+        $status->slug = str_slug($status->name);
         $status->save();
         flash(__('messages.create', ['name' => 'status']))
             ->success();
@@ -80,6 +81,7 @@ class TaskStatusController extends Controller
             'name' => 'required|unique:task_statuses',
         ]);
         $status->name = $request->input('name');
+        $status->slug = str_slug($status->name);
         $status->save();
         flash(__('messages.uodate', ['name' => 'status']))
             ->success();

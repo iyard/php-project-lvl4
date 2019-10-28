@@ -5,7 +5,7 @@
     @include('flash::message')
     <h1>Tasks list</h1>
     <p>
-    <a href="{{ route('tasks.create') }}" class="btn btn-success">@lang('buttons.create')</a>
+    <a href="{{ route('tasks.create', 'novyy') }}" class="btn btn-success">@lang('buttons.create')</a>
     </p>
     <table class="table">
         <thead>

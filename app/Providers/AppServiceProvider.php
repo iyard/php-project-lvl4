@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\TaskStatus;
+
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 

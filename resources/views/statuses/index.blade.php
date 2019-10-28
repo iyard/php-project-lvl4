@@ -12,6 +12,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
+                <th scope="col">Slug</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -20,6 +21,7 @@
                 <tr>
                     <th scope="row">{{$status->id}}</th>
                     <td>{{$status->name}}</td>
+                    <td>{{$status->slug}}</td>
                     <td>
                         <a href="{{ route('statuses.edit', ['status' => $status]) }}" class="btn btn-info">@lang('buttons.edit')</a>
                         <a href="{{ route('statuses.destroy', ['status' => $status]) }}" class="btn btn-danger" data-confirm="Вы уверены?" data-method="delete" rel="nofollow">@lang('buttons.delete')</a>

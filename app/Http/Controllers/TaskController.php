@@ -33,19 +33,13 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($defaultTaskStatus = 'novyy')
     {
         $task = new Task();
-        $taskStatuses = TaskStatus::all()->pluck('name', 'id')->toArray();
-        $defaultTaskStatus = TaskStatus::where('name', 'новый')->first();
-        $defaultTaskStatusId = $defaultTaskStatus->id;
-        
-        $users = User::all()->pluck('name', 'id')->toArray();
-        $defaultUser = __('messages.defaultFieldValueName', ['fieldName' => 'user']);
-        $users[null] = $defaultUser;
-        
-        $tags = '';
-        return view('tasks.create', compact('task', 'taskStatuses', 'defaultTaskStatusId', 'users', 'tags'));
+        $taskStatuses = TaskStatus::all();
+        $users = User::all();
+        $tagsString = getTagsString($task->id);
+        return view('tasks.create', compact('task', 'taskStatuses', 'users', 'tagsString', 'defaultTaskStatus'));
     }
 
     /**
@@ -60,33 +54,12 @@ class TaskController extends Controller
         $task = new Task();
         $task->fill($request->all());
         $task->save();
+        saveTags($task, $request->input('tags'));
         
-        $inputTags = $this->explodeTags($request->input('tags'));
-        foreach ($inputTags as $tag) {
-            Tag::firstOrCreate(['name' => $tag]);
-        }
-        $tags = Tag::whereIn('name', $inputTags)
-                        ->get();
-        $task->tags()->attach($tags);
-
         flash(__('messages.create', ['name' => 'task']))
             ->success();
         return redirect()
             ->route('tasks.index');
-    }
-
-    private function explodeTags($tags)
-    {
-        $explodedTags = collect(explode(',', $tags))
-                        ->map(function ($tag) {
-                            return trim($tag);
-                        })
-                        ->filter(function ($tag) {
-                            return $tag != '';
-                        })
-                        ->all();
-
-        return $explodedTags;
     }
 
     /**
@@ -108,14 +81,10 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $taskStatuses = TaskStatus::all()->pluck('name', 'id')->toArray();
-        $defaultTaskStatusId = null;
-        $users = User::all()->pluck('name', 'id')->toArray();
-
-        $tags = Task::find($task->id)->tags()->get();
-        $tagsString = $tags->implode('name', ', ');
-
-        return view('tasks.edit', compact('task', 'taskStatuses', 'defaultTaskStatusId', 'users', 'tagsString'));
+        $taskStatuses = TaskStatus::all();
+        $users = User::all();
+        $tagsString = getTagsString($task->id);
+        return view('tasks.edit', compact('task', 'taskStatuses', 'users', 'tagsString'));
     }
 
     /**
@@ -130,14 +99,7 @@ class TaskController extends Controller
         $validated = $request->validated();
         $task->fill($request->all());
         $task->save();
-
-        $inputTags = $this->explodeTags($request->input('tags'));
-        foreach ($inputTags as $tag) {
-            Tag::firstOrCreate(['name' => $tag]);
-        }
-        $tags = Tag::whereIn('name', $inputTags)->get();
-        $task->tags()->detach();
-        $task->tags()->attach($tags);
+        saveTags($task, $request->input('tags'));
 
         flash(__('messages.update', ['name' => 'task']))
             ->success();
@@ -153,6 +115,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $task->tags()->detach();
         $task->delete();
         flash(__('messages.delete', ['name' => 'task']))
             ->success();
