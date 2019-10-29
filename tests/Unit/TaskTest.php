@@ -96,10 +96,20 @@ class TaskTest extends TestCase
             'creator_id' => $updatedTask->creator_id,
             'assignedTo_id' => $updatedTask->assignedTo_id 
         ]);
+
+        $tags = $this->task->tags()->get();
+        foreach($tags as $tag) {
+            $this->assertDatabaseHas('tag_task', [
+                'tag_id' => $tag->id,
+                'task_id' => $this->task->id
+            ]);
+        }
     }
 
     public function testDestroy()
     {
+        $tags = $this->task->tags()->get();
+
         $response = $this->actingAs($this->user)
                          ->delete(route('tasks.destroy', $this->task));
         $response->assertStatus(302);
@@ -110,7 +120,12 @@ class TaskTest extends TestCase
             'creator_id' => $this->task->creator_id,
             'assignedTo_id' => $this->task->assignedTo_id 
         ]);
+        
+        foreach($tags as $tag) {
+            $this->assertDatabaseMissing('tag_task', [
+                'tag_id' => $tag->id,
+                'task_id' => $this->task->id
+            ]);
+        }
     }
-
-    
 }
