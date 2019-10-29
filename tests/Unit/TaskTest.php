@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Task;
 use App\User;
 use App\Tag;
-use App\TaskStatus;
 
 class TaskTest extends TestCase
 {

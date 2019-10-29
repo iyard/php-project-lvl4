@@ -20,7 +20,7 @@
 <div class="form-group dropdown">
     {{ Form::label('status_id', 'Status') }}
     {{ Form::select('status_id', $taskStatuses->pluck('name', 'id'), 
-        isset($defaultTaskStatus) ? $taskStatuses->where('slug', $defaultTaskStatus)->first()->id : $task->status_id, 
+        isset($defaultTaskStatus) ? dd($taskStatuses->where('slug', $defaultTaskStatus)->first())->id : $task->status_id, 
         ['class' => 'form-control', 'required' => 'required']) }}
     @error('status_id')
     <div class="alert alert-danger">{{ $message }}</div>
