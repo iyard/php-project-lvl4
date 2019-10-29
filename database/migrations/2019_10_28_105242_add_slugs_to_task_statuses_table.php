@@ -14,7 +14,7 @@ class AddSlugsToTaskStatusesTable extends Migration
     public function up()
     {
         Schema::table('task_statuses', function (Blueprint $table) {
-            $table->char('slug', 25)->nullable();
+            $table->string('slug')->nullable();
         });
     }
 
