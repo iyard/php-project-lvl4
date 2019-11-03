@@ -22,10 +22,27 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::all();
-        return view('tasks.index', compact('tasks'));
+        $creatorName = $request->input('creatorName') ?? '';
+        $assignedToName = $request->input('assignedToName') ?? '';
+        $taskStatusId = $request->input('status_id') ?? 0;
+        $tag = $request->input('tag') ?? '';
+
+        $taskStatuses = TaskStatus::all();
+        $tasks = Task::OfCreator($creatorName)
+            ->OfAssignedTo($assignedToName)
+            ->OfTaskStatus($taskStatusId)
+            ->OfTags($tag)
+            ->get();
+        return view('tasks.index', compact(
+            'tasks',
+            'creatorName',
+            'assignedToName',
+            'taskStatuses',
+            'taskStatusId',
+            'tag'
+        ));
     }
 
     /**

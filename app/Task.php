@@ -42,4 +42,30 @@ class Task extends Model
     {
         return $this->belongsToMany(Tag::class, 'tag_task');
     }
+
+    public function scopeOfCreator($query, $name)
+    {
+        return $query->whereHas('creator', function ($q) use ($name) {
+            $q->where('name', 'like', '%' . $name . '%');
+        });
+    }
+
+    public function scopeOfAssignedTo($query, $name)
+    {
+        return $query->whereHas('assignedTo', function ($q) use ($name) {
+            $q->where('name', 'like', '%' . $name . '%');
+        });
+    }
+    
+    public function scopeOfTaskStatus($query, $taskStatusId)
+    {
+         return $taskStatusId === 0 ? $query : $query->where('status_id', $taskStatusId);
+    }
+
+    public function scopeOfTags($query, $name)
+    {
+        return $query->whereHas('tags', function ($q) use ($name) {
+            $q->where('name', 'like', '%' . $name . '%');
+        });
+    }
 }

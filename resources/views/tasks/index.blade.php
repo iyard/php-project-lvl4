@@ -4,9 +4,23 @@
 @section('content')
     @include('flash::message')
     <h1>Tasks list</h1>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">{{ __('Filter tasks') }}</div>
+            <div class="card-body">
+                {{ Form::open(['url' => route('tasks.index'), 'method' => 'GET']) }}
+                @include('tasks.formFilter')
+                {{ Form::submit(__('buttons.search'), ['class' => 'btn btn-primary']) }}
+                {{ Form::close() }}  
+            </div>
+        </div>
+    </div>
+    <br>
     <p>
-    <a href="{{ route('tasks.create', 'novyy') }}" class="btn btn-success">@lang('buttons.create')</a>
+        <a href="{{ route('tasks.create', 'novyy') }}" class="btn btn-success">@lang('buttons.create')</a>
     </p>
+
     <table class="table">
         <thead>
             <tr>
