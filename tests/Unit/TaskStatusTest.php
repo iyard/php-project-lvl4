@@ -5,16 +5,15 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
 use App\TaskStatus;
 use App\User;
 
 class TaskStatusTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $user;
     private $status;
-
-    use RefreshDatabase;
 
     public function setUp(): void
     {
@@ -26,7 +25,7 @@ class TaskStatusTest extends TestCase
         $this->status->name = 'test';
         $this->status->save();
     }
-    
+
     public function testIndex()
     {
         $responce = $this->get(route('statuses.index'));
@@ -62,7 +61,7 @@ class TaskStatusTest extends TestCase
         $updatedStatus = new TaskStatus();
         $updatedStatus->name = 'test2';
         $response = $this->actingAs($this->user)
-                         ->patch(route('statuses.update', ['status' => $this->status, 
+                         ->patch(route('statuses.update', ['status' => $this->status,
                                                            'name' => $updatedStatus->name
                                                         ]));
         $response->assertStatus(302);

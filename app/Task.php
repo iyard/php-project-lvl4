@@ -9,7 +9,7 @@ use App\TaskStatus;
 
 class Task extends Model
 {
- 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -43,6 +43,11 @@ class Task extends Model
         return $this->belongsToMany(Tag::class, 'tag_task');
     }
 
+    /**
+     * @param $query
+     * @param $name
+     * @return mixed
+     */
     public function scopeOfCreator($query, $name)
     {
         return $query->whereHas('creator', function ($q) use ($name) {
@@ -56,7 +61,7 @@ class Task extends Model
             $q->where('name', 'like', '%' . $name . '%');
         });
     }
-    
+
     public function scopeOfTaskStatus($query, $taskStatusId)
     {
          return $taskStatusId === 0 ? $query : $query->where('status_id', $taskStatusId);

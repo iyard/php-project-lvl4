@@ -3,16 +3,15 @@
 namespace Tests\Unit;
 
 use App\User;
-
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
 {
-    private $user;
-
     use RefreshDatabase;
+
+    private $user;
 
     public function setUp(): void
     {
@@ -25,7 +24,7 @@ class UserTest extends TestCase
         $response = $this->get(route('users.edit', $this->user));
         $response->assertRedirect(route('login'));
     }
-    
+
     public function testShow()
     {
         $response = $this->get(route('users.index'));
@@ -43,7 +42,7 @@ class UserTest extends TestCase
     {
         $updatedUser = factory(User::class)->make();
         $response = $this->actingAs($this->user)
-            ->patch(route('users.update', ['user' => $this->user, 
+            ->patch(route('users.update', ['user' => $this->user,
                                             'name' => $updatedUser->name,
                                             'email' => $updatedUser->email,
                                             'password' => $updatedUser->password,
@@ -66,5 +65,4 @@ class UserTest extends TestCase
             'email' => $this->user->email
         ]);
     }
-
 }

@@ -8,14 +8,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterTest extends TestCase
 {
-    private $user;
-
     use RefreshDatabase;
+
+    private $user;
 
     public function setUp(): void
     {
         parent::setUp();
-        
+
         $user = factory(\App\User::class)->make();
         $this->user = [
             'name' => $user->name,
@@ -27,8 +27,8 @@ class RegisterTest extends TestCase
 
     public function testRegisterFormDisplayed()
     {
-       $response = $this->get(route('register'));
-       $response->assertStatus(200);
+        $response = $this->get(route('register'));
+        $response->assertStatus(200);
     }
 
     public function testRegisterValidUser()
@@ -45,7 +45,7 @@ class RegisterTest extends TestCase
     public function testRegisterNotValidUser()
     {
         $this->user['password_confirmation'] = 'invalid';
-        
+
         $response = $this->post(route('register'), $this->user);
         $response->assertStatus(302);
         $response->assertSessionHasErrors();
