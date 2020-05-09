@@ -8,7 +8,10 @@ run:
 	- php artisan serve
 
 lint:
-	composer run-script phpcs -- --standard=PSR12 app routes tests
+	composer phpcs
+
+lint-fix:
+	composer phpcbf
 
 ide-helper:
 	php artisan ide-helper:eloquent
