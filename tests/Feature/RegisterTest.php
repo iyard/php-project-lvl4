@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterTest extends TestCase
@@ -17,12 +16,7 @@ class RegisterTest extends TestCase
         parent::setUp();
 
         $user = factory(\App\User::class)->make();
-        $this->user = [
-            'name' => $user->name,
-            'email' => $user->email,
-            'password' => $user->password,
-            'password_confirmation' => $user->password
-        ];
+        $this->user = $user->toArray();
     }
 
     public function testRegisterFormDisplayed()
