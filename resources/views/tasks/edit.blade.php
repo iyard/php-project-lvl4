@@ -1,3 +1,8 @@
+@php
+    use App\Task;
+    /** @var Task $task */
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Task edit')
@@ -11,7 +16,7 @@
                         {{ Form::model($task, ['url' => route('tasks.update', compact('task')), 'method' => 'PATCH']) }}
                         @include('tasks.form')
                         {{ Form::submit(__('buttons.save'), ['class' => 'btn btn-primary']) }}
-                        {{ Form::close() }}  
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>

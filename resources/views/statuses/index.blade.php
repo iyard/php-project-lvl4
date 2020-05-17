@@ -1,3 +1,8 @@
+@php
+    use App\TaskStatus;
+    /** @var TaskStatus[] $statuses */
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Task statuses list')
@@ -18,6 +23,7 @@
         </thead>
         <tbody>
             @foreach($statuses as $status)
+                @php/** @var TaskStatus $status */@endphp
                 <tr>
                     <th scope="row">{{$status->id}}</th>
                     <td>{{$status->name}}</td>

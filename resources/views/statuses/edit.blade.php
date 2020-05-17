@@ -1,3 +1,8 @@
+@php
+    use App\TaskStatus;
+    /** @var TaskStatus $status */
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Task status edit')
@@ -11,7 +16,7 @@
                         {{ Form::model($status, ['url' => route('statuses.update', ['status' => $status]), 'method' => 'PATCH']) }}
                         @include('statuses.form')
                         {{ Form::submit(__('buttons.save'), ['class' => 'btn btn-primary']) }}
-                        {{ Form::close() }}  
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>

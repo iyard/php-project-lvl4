@@ -1,3 +1,8 @@
+@php
+    use App\Task;
+    /** @var Task $task */
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Task')

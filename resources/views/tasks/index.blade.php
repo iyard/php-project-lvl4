@@ -1,10 +1,16 @@
+@php
+    use App\Task;
+    use App\Tag;
+    /** @var Task[] $tasks */
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Tasks list')
 @section('content')
     @include('flash::message')
     <h1>Tasks list</h1>
-    
+
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">{{ __('Filter tasks') }}</div>
@@ -12,7 +18,7 @@
                 {{ Form::open(['url' => route('tasks.index'), 'method' => 'GET']) }}
                 @include('tasks.formFilter')
                 {{ Form::submit(__('buttons.search'), ['class' => 'btn btn-primary']) }}
-                {{ Form::close() }}  
+                {{ Form::close() }}
             </div>
         </div>
     </div>
@@ -36,6 +42,7 @@
         </thead>
         <tbody>
             @foreach($tasks as $task)
+                @php/** @var Task $task */@endphp
                 <tr>
                     <th scope="row">{{$task->id}}</th>
                     <td>{{$task->name}}</td>
@@ -44,8 +51,10 @@
                     <td>{{$task->assignedTo->name}}</td>
                     <td>
                         @foreach($task->tags as $tag)
+                            @php/** @var Tag $tag */@endphp
+
                         #{{$tag->name}}
-                        
+
                         @endforeach
                     </td>
                     <td>{{$task->created_at}}</td>
