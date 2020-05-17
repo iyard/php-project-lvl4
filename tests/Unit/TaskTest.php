@@ -23,7 +23,7 @@ class TaskTest extends TestCase
         $this->task->tags()->createMany(
             factory(Tag::class, 3)->make()->toArray()
         );
-//        $this->user = factory(User::class)->create();
+        $this->user = factory(User::class)->create();
     }
 
     public function testIndex()
