@@ -17,11 +17,6 @@ class TaskController extends Controller
              ->except('index');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $creatorName = $request->input('creatorName') ?? '';
@@ -29,42 +24,21 @@ class TaskController extends Controller
         $taskStatusId = $request->input('status_id') ?? 0;
         $tag = $request->input('tag') ?? '';
 
-        $taskStatuses = TaskStatus::all();
         $tasks = Task::OfCreator($creatorName)
             ->OfAssignedTo($assignedToName)
             ->OfTaskStatus($taskStatusId)
             ->OfTags($tag)
             ->get();
-        return view('tasks.index', compact(
-            'tasks',
-            'creatorName',
-            'assignedToName',
-            'taskStatuses',
-            'taskStatusId',
-            'tag'
-        ));
+        return view('tasks.index', compact('tasks'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create($defaultTaskStatus = null)
+    public function create()
     {
         $task = new Task();
-        $taskStatuses = TaskStatus::all();
-        $users = User::all();
         $tagsString = getTagsString($task->id);
-        return view('tasks.create', compact('task', 'taskStatuses', 'users', 'tagsString', 'defaultTaskStatus'));
+        return view('tasks.create', compact('task', 'tagsString'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  App\Http\Requests\  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreTask $request)
     {
         $validated = $request->validated();
@@ -72,45 +46,24 @@ class TaskController extends Controller
         $task->fill($request->all());
         $task->save();
         saveTags($task, $request->input('tags'));
-        
+
         flash(__('messages.create', ['name' => 'task']))
             ->success();
         return redirect()
             ->route('tasks.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Task $task)
     {
         return view('tasks.show', compact('task'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Task $task)
     {
-        $taskStatuses = TaskStatus::all();
-        $users = User::all();
         $tagsString = getTagsString($task->id);
-        return view('tasks.edit', compact('task', 'taskStatuses', 'users', 'tagsString'));
+        return view('tasks.edit', compact('task', 'tagsString'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(StoreTask $request, Task $task)
     {
         $validated = $request->validated();
@@ -124,12 +77,6 @@ class TaskController extends Controller
             ->route('tasks.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Task $task)
     {
         $task->tags()->detach();
