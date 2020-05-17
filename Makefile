@@ -1,11 +1,11 @@
 test:
-	- composer run-script phpunit tests
+	composer run-script phpunit tests
 
 install:
-	- composer install
+	composer install
 
 run:
-	- php artisan serve
+	php artisan serve
 
 lint:
 	composer phpcs
