@@ -17,20 +17,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::resource('/statuses', 'TaskStatusController')->except([
+Route::resource('statuses', 'TaskStatusController')->except([
     'show'
 ]);
 
-Route::get('/tasks/create/{defaultTaskStatus?}', 'TaskController@create')->name('tasks.create');
+Route::resource('tasks', 'TaskController');
 
-Route::resource('/tasks', 'TaskController')->except([
+
+
+Route::resource('users', 'UserController')->except([
     'create'
 ]);
 
-
-
-Route::resource('/users', 'UserController')->except([
-    'create'
-]);
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('home', 'HomeController@index')->name('home');
