@@ -29,71 +29,26 @@ class TaskTest extends TestCase
     public function testIndex()
     {
         $response = $this->get(route('tasks.index'));
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 
     public function testCreate()
     {
         $response = $this->actingAs($this->user)
             ->get(route('tasks.create'));
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 
     public function testStore()
     {
         $response = $this->actingAs($this->user)
-            ->post(route('tasks.store', ['task' => $this->task,
-                                            'name' => $this->task->name,
-                                            'description' => $this->task->description,
-                                            'status_id' => $this->task->status_id,
-                                            'creator_id' => $this->task->creator_id,
-                                            'assignedTo_id' => $this->task->assignedTo_id,
-                                            'tags' => getTagsString($this->task->id)
-                                            ]));
+            ->post(route('tasks.store', [
+                'task' => $this->task,
+                'tags' => getTagsString($this->task->id)
+            ]));
         $response->assertStatus(302);
-        $this->assertDatabaseHas('tasks', [
-            'name' => $this->task->name,
-            'description' => $this->task->description,
-            'status_id' => $this->task->status_id,
-            'creator_id' => $this->task->creator_id,
-            'assignedTo_id' => $this->task->assignedTo_id
-        ]);
-    }
+        $this->assertDatabaseHas('tasks', ['id' => $this->task->id]);
 
-    public function testShow()
-    {
-        $response = $this->actingAs($this->user)
-            ->get(route('tasks.show', $this->task));
-        $response->assertStatus(200);
-    }
-
-    public function testEdit()
-    {
-        $response = $this->actingAs($this->user)
-            ->get(route('tasks.edit', $this->task));
-        $response->assertStatus(200);
-    }
-
-    public function testUpdate()
-    {
-        $updatedTask = factory(Task::class)->make();
-        $response = $this->actingAs($this->user)
-            ->patch(route('tasks.update', ['task' => $this->task,
-                                            'name' => $updatedTask->name,
-                                            'description' => $updatedTask->description,
-                                            'status_id' => $updatedTask->status_id,
-                                            'creator_id' => $updatedTask->creator_id,
-                                            'assignedTo_id' => $updatedTask->assignedTo_id,
-                                            'tags' => getTagsString($this->task->id)
-                                            ]));
-        $response->assertStatus(302);
-        $this->assertDatabaseHas('tasks', [
-            'name' => $updatedTask->name,
-            'description' => $updatedTask->description,
-            'status_id' => $updatedTask->status_id,
-            'creator_id' => $updatedTask->creator_id,
-            'assignedTo_id' => $updatedTask->assignedTo_id
-        ]);
         $tags = $this->task->tags()->get();
         foreach ($tags as $tag) {
             $this->assertDatabaseHas('tag_task', [
@@ -103,6 +58,20 @@ class TaskTest extends TestCase
         }
     }
 
+    public function testShow()
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('tasks.show', $this->task));
+        $response->assertOk();
+    }
+
+    public function testEdit()
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('tasks.edit', $this->task));
+        $response->assertOk();
+    }
+
     public function testDestroy()
     {
         $tags = $this->task->tags()->get();
@@ -110,13 +79,7 @@ class TaskTest extends TestCase
         $response = $this->actingAs($this->user)
                          ->delete(route('tasks.destroy', $this->task));
         $response->assertStatus(302);
-        $this->assertDatabaseMissing('tasks', [
-            'name' => $this->task->name,
-            'description' => $this->task->description,
-            'status_id' => $this->task->status_id,
-            'creator_id' => $this->task->creator_id,
-            'assignedTo_id' => $this->task->assignedTo_id
-        ]);
+        $this->assertDatabaseMissing('tasks', ['id' => $this->task->id,]);
 
         foreach ($tags as $tag) {
             $this->assertDatabaseMissing('tag_task', [

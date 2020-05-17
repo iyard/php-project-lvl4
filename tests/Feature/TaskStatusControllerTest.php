@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\TaskStatus;
 use App\User;
 
-class TaskStatusTest extends TestCase
+class TaskStatusControllerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -29,20 +29,20 @@ class TaskStatusTest extends TestCase
     public function testIndex()
     {
         $responce = $this->get(route('statuses.index'));
-        $responce->assertStatus(200);
+        $responce->assertOk();
     }
 
     public function testCreate()
     {
         $response = $this->actingAs($this->user)
-                         ->get(route('statuses.create'));
-        $response->assertStatus(200);
+            ->get(route('statuses.create'));
+        $response->assertOk();
     }
 
     public function testStore()
     {
         $response = $this->actingAs($this->user)
-                         ->post(route('statuses.store'), ['name' => $this->status->name]);
+            ->post(route('statuses.store'), ['name' => $this->status->name]);
         $response->assertStatus(302);
         $this->assertDatabaseHas('task_statuses', [
             'name' => $this->status->name
@@ -52,8 +52,8 @@ class TaskStatusTest extends TestCase
     public function testEdit()
     {
         $response = $this->actingAs($this->user)
-                         ->get(route('statuses.edit', $this->status));
-        $response->assertStatus(200);
+            ->get(route('statuses.edit', $this->status));
+        $response->assertOk();
     }
 
     public function testUpdate()
@@ -61,9 +61,10 @@ class TaskStatusTest extends TestCase
         $updatedStatus = new TaskStatus();
         $updatedStatus->name = 'test2';
         $response = $this->actingAs($this->user)
-                         ->patch(route('statuses.update', ['status' => $this->status,
-                                                           'name' => $updatedStatus->name
-                                                        ]));
+            ->patch(route('statuses.update', [
+                'status' => $this->status,
+                'name' => $updatedStatus->name
+            ]));
         $response->assertStatus(302);
         $this->assertDatabaseHas('task_statuses', [
             'name' => $updatedStatus->name
@@ -76,7 +77,7 @@ class TaskStatusTest extends TestCase
                          ->delete(route('statuses.destroy', $this->status));
         $response->assertStatus(302);
         $this->assertDatabaseMissing('task_statuses', [
-            'name' => $this->status->name
+            'id' => $this->status->id
         ]);
     }
 }

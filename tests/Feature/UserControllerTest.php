@@ -7,7 +7,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UserTest extends TestCase
+class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -28,32 +28,14 @@ class UserTest extends TestCase
     public function testShow()
     {
         $response = $this->get(route('users.index'));
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 
     public function testEdit()
     {
         $response = $this->actingAs($this->user)
             ->get(route('users.edit', $this->user));
-        $response->assertStatus(200);
-    }
-
-    public function testUpdate()
-    {
-        $updatedUser = factory(User::class)->make();
-        $response = $this->actingAs($this->user)
-            ->patch(route('users.update', [
-                'user' => $this->user,
-                'name' => $updatedUser->name,
-                'email' => $updatedUser->email,
-                'password' => $updatedUser->password,
-                'password_confirmation' => $updatedUser->password
-            ]));
-        $response->assertStatus(302);
-        $this->assertDatabaseHas('users', [
-            'name' => $updatedUser->name,
-            'email' => $updatedUser->email
-        ]);
+        $response->assertOk();
     }
 
     public function testDestroy()
@@ -61,9 +43,6 @@ class UserTest extends TestCase
         $response = $this->actingAs($this->user)
                          ->delete(route('users.destroy', $this->user));
         $response->assertStatus(302);
-        $this->assertDatabaseMissing('users', [
-            'name' => $this->user->name,
-            'email' => $this->user->email
-        ]);
+        $this->assertDatabaseMissing('users', ['id' => $this->user->id]);
     }
 }
