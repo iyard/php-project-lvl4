@@ -37,6 +37,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static function getList()
+    {
+        return self::pluck('name', 'id')->prepend('', '');
+    }
+
     public function createdTasks()
     {
         return $this->hasMany(Task::class, 'creator');
